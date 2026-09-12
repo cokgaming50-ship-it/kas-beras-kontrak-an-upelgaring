@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KasBeras KG Pro — Manajemen Stok Beras</title>
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2d6650">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KasBeras">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="brand big"><div class="brand-icon">🌾</div><div><b>kontrak an upel garing</b><span>Rice Stock Management</span></div></div>
+    <h1>Selamat datang kembali</h1><p>Kelola stok beras kontrakan dengan lebih rapi dan terukur.</p>
+    <form id="loginForm"><label>Username<input id="loginUser" value="admin" required></label><label>Password<input id="loginPass" type="password" value="admin" required></label><button class="primary full">Masuk ke dashboard</button></form>
+    <small>kontrak an <b></b> / <b></b></small>
+  </div>
+</div>
+
+<div id="app" class="app hidden">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><div class="brand-icon">🌾</div><div><b>KasBeras</b><span>Rice Stock Management</span></div></div>
+  <div class="profile"><div class="avatar">AD</div><div><b>kas beras</b><span>Administrator</span></div></div>
+  <nav>
+    <button class="nav active" data-page="dashboard">⌂ <span>Dashboard</span></button>
+    <button class="nav" data-page="anggota">♙ <span>Anggota</span><em id="navMembers">0</em></button>
+    <button class="nav" data-page="berasmasuk">↗ <span>Beras Masuk</span></button>
+    <button class="nav" data-page="pemakaian">↘ <span>Pemakaian</span></button>
+    <button class="nav" data-page="stok">🌾 <span>Stok Beras</span></button>
+    <button class="nav" data-page="laporan">▤ <span>Laporan</span></button>
+  </nav>
+  <div class="sidebar-foot"><button class="nav" id="darkBtn">◐ <span>Mode tampilan</span></button><button class="nav" id="logoutBtn">⇥ <span>Keluar</span></button></div>
+</aside>
+
+<main class="main">
+<header class="topbar"><button class="menu" id="menuBtn">☰</button><div><div class="eyebrow">MANAJEMEN STOK BERAS</div><h2 id="pageTitle">Dashboard</h2></div><div class="topright"><span class="date" id="today"></span><button class="primary" id="quickStock">＋ Catat stok</button></div></header>
+
+<section class="page" id="dashboard">
+  <div class="welcome"><div><span class="eyebrow light">RINGKASAN STOK BERAS</span><h1>Pemuda pak karno</h1><p></p></div><div class="welcome-icon">🌾</div></div>
+  <div class="metrics">
+    <div class="metric"><span class="metric-icon green">↗</span><div><small>Total beras masuk</small><b id="mIn">0 Kg</b><span id="mInCount">0 catatan</span></div></div>
+    <div class="metric"><span class="metric-icon red">↘</span><div><small>Total pemakaian</small><b id="mOut">0 Kg</b><span id="mOutCount">0 catatan</span></div></div>
+    <div class="metric"><span class="metric-icon gold">🌾</span><div><small>Stok tersedia</small><b id="mStock">0 Kg</b><span id="mStockNote">Belum ada data</span></div></div>
+    <div class="metric"><span class="metric-icon">♙</span><div><small>Jumlah anggota</small><b id="mMembers">0</b><span>penghuni terdaftar</span></div></div>
+  </div>
+  <div class="grid2">
+    <article class="card"><div class="card-title"><div><b>Pergerakan beras</b><p>Perbandingan beras masuk dan pemakaian</p></div></div><div class="chart" id="chart"></div><div class="legend"><span>● Beras masuk</span><span>● Pemakaian</span></div></article>
+    <article class="card"><div class="card-title"><div><b>Status stok</b><p>Kondisi stok saat ini</p></div></div><div class="stock-status"><div class="stock-circle"><strong id="stockPct">0%</strong><small>kapasitas</small></div><div><b id="stockStatusTitle">Belum ada stok</b><p id="stockStatusText">Catat beras masuk untuk mulai menghitung stok.</p></div></div></article>
+  </div>
+  <article class="card"><div class="card-title"><div><b>Aktivitas terbaru</b><p>Pergerakan stok terakhir</p></div><button class="link" data-go="stok">Lihat semua →</button></div><div class="table-wrap"><table><thead><tr><th>Tanggal</th><th>Keterangan</th><th>Jenis</th><th>Jumlah</th><th>Stok</th></tr></thead><tbody id="recent"></tbody></table></div></article>
+</section>
+
+<section class="page hidden" id="anggota"><div class="page-head"><div><div class="eyebrow">PENGELOLAAN PENGHUNI</div><h1>Anggota kontrakan</h1><p>Data penghuni yang menggunakan persediaan beras.</p></div><button class="primary" id="addMember">＋ Tambah anggota</button></div><article class="card"><div class="toolbar"><input id="memberSearch" placeholder="Cari nama atau kamar..."><span class="count" id="memberCountLabel">0 anggota</span></div><div class="table-wrap"><table><thead><tr><th>Anggota</th><th>Kamar</th><th>Status</th><th></th></tr></thead><tbody id="members"></tbody></table></div></article></section>
+
+<section class="page hidden" id="berasmasuk"><div class="page-head"><div><div class="eyebrow">PERSEDIAAN MASUK</div><h1>Beras masuk</h1><p>Catat setiap penambahan stok beras dalam kilogram.</p></div><button class="primary" id="addIn">＋ Catat beras masuk</button></div><div class="metrics mini"><div class="metric"><span class="metric-icon green">↗</span><div><small>Total masuk</small><b id="inPageTotal">0 Kg</b></div></div><div class="metric"><span class="metric-icon gold">🌾</span><div><small>Catatan masuk</small><b id="inPageCount">0</b></div></div></div><article class="card"><div class="toolbar"><input id="inSearch" placeholder="Cari keterangan..."><input type="month" id="inMonth"></div><div class="table-wrap"><table><thead><tr><th>Tanggal</th><th>Keterangan</th><th>Jumlah</th><th></th></tr></thead><tbody id="inTable"></tbody></table></div></article></section>
+
+<section class="page hidden" id="pemakaian"><div class="page-head"><div><div class="eyebrow">PERSEDIAAN KELUAR</div><h1>Pemakaian beras</h1><p>Catat setiap penggunaan beras dari stok kontrakan.</p></div><button class="primary" id="addOut">＋ Catat pemakaian</button></div><div class="metrics mini"><div class="metric"><span class="metric-icon red">↘</span><div><small>Total pemakaian</small><b id="outPageTotal">0 Kg</b></div></div><div class="metric"><span class="metric-icon gold">🌾</span><div><small>Stok sekarang</small><b id="outPageStock">0 Kg</b></div></div></div><article class="card"><div class="toolbar"><input id="outSearch" placeholder="Cari keterangan..."><input type="month" id="outMonth"></div><div class="table-wrap"><table><thead><tr><th>Tanggal</th><th>Keterangan</th><th>Jumlah</th><th></th></tr></thead><tbody id="outTable"></tbody></table></div></article></section>
+
+<section class="page hidden" id="stok"><div class="page-head"><div><div class="eyebrow">INVENTARIS</div><h1>Stok beras</h1><p>Ringkasan seluruh pergerakan dan stok akhir.</p></div><button class="primary" id="addStock">＋ Catat stok</button></div><div class="stock-hero card"><div><small>STOK TERSEDIA</small><strong id="stockBig">0 Kg</strong><p id="stockAdvice">Belum ada data stok.</p></div><div class="stock-meter"><div id="stockFill"></div></div></div><article class="card"><div class="card-title"><div><b>Riwayat stok</b><p>Pergerakan beras dari waktu ke waktu</p></div></div><div class="table-wrap"><table><thead><tr><th>Tanggal</th><th>Keterangan</th><th>Pergerakan</th><th>Stok setelah</th><th></th></tr></thead><tbody id="stockTable"></tbody></table></div></article></section>
+
+<section class="page hidden" id="laporan"><div class="page-head"><div><div class="eyebrow">LAPORAN</div><h1>Laporan stok beras</h1><p>Ringkasan persediaan yang siap dicetak atau disimpan sebagai PDF.</p></div><button class="primary" id="print">⤓ Cetak / PDF</button></div><div class="report-header card"><div><b>Laporan Stok Beras Kontrakan</b><p id="reportDate"></p></div><div class="report-total"><small>STOK AKHIR</small><b id="rStock">0 Kg</b></div></div><div class="metrics mini"><div class="metric"><span class="metric-icon green">↗</span><div><small>Total beras masuk</small><b id="rIn">0 Kg</b></div></div><div class="metric"><span class="metric-icon red">↘</span><div><small>Total pemakaian</small><b id="rOut">0 Kg</b></div></div><div class="metric"><span class="metric-icon gold">♙</span><div><small>Anggota</small><b id="rMembers">0</b></div></div></div><article class="card"><div class="table-wrap"><table><thead><tr><th>Tanggal</th><th>Keterangan</th><th>Jenis</th><th>Jumlah</th><th>Stok</th></tr></thead><tbody id="reportTable"></tbody></table></div></article></section>
+</main></div>
+
+<div class="modal hidden" id="stockModal"><div class="modal-box"><div class="modal-head"><div><div class="eyebrow">INVENTARIS</div><h2 id="stockModalTitle">Catat stok beras</h2></div><button class="close" data-close>×</button></div><form id="stockForm"><label>Tanggal<input type="date" id="stDate" required></label><label>Keterangan<input id="stDesc" placeholder="Contoh: Pembelian beras / Pemakaian dapur" required></label><div class="row"><label>Jenis<select id="stType"><option value="in">Beras masuk</option><option value="out">Pemakaian</option></select></label><label>Jumlah (Kg)<input type="number" id="stKg" min="0.5" step="0.5" required></label></div><div class="actions"><button type="button" class="secondary" data-close>Batal</button><button class="primary">Simpan</button></div></form></div></div>
+
+<div class="modal hidden" id="memberModal"><div class="modal-box"><div class="modal-head"><div><div class="eyebrow">PENGHUNI</div><h2>Tambah anggota</h2></div><button class="close" data-close>×</button></div><form id="memberForm"><label>Nama lengkap<input id="memName" required></label><label>Kamar<input id="memRoom" placeholder="A-01" required></label><div class="actions"><button type="button" class="secondary" data-close>Batal</button><button class="primary">Simpan</button></div></form></div></div>
+<div class="toast" id="toast"></div>
+<script src="js/app.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(r => console.log('SW registered:', r.scope))
+      .catch(e => console.warn('SW failed:', e));
+  });
+}
+</script>
+</body></html>
